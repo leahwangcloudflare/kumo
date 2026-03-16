@@ -18,14 +18,27 @@ export interface KumoFieldVariantsProps {
    * Used to support different layout patterns (e.g., iOS-style toggles on the right).
    */
   controlFirst?: boolean;
+  /**
+   * Size of the field, affects spacing between label and input.
+   * - `"xs"` — Extra small (gap-1)
+   * - `"sm"` — Small (gap-1)
+   * - `"base"` — Default (gap-1)
+   * - `"lg"` — Large (gap-2)
+   * @default "base"
+   */
+  size?: "xs" | "sm" | "base" | "lg";
 }
 
 export function fieldVariants({
   controlFirst = false,
+  size = "base",
 }: KumoFieldVariantsProps = {}) {
+  const gapClass = size === "lg" ? "gap-2" : size === "base" ? "gap-1" : "gap-1";
+  
   return cn(
     // Base styles - vertical layout (default)
-    "grid gap-2",
+    "grid",
+    gapClass,
 
     // Horizontal layout for checkbox and switch
     // Default: Grid auto-reverses in RTL (desired)
@@ -96,6 +109,11 @@ export interface FieldProps extends KumoFieldVariantsProps {
   description?: ReactNode;
   /** When `true`, places the control before the label (for checkbox/switch layouts). */
   controlFirst?: boolean;
+  /**
+   * Size of the field, affects spacing between label and input.
+   * @default "base"
+   */
+  size?: "xs" | "sm" | "base" | "lg";
 }
 
 /**
@@ -117,16 +135,27 @@ export function Field({
   error,
   description,
   controlFirst = false,
+  size = "base",
 }: FieldProps) {
   // Show "(optional)" when required is explicitly false
   const showOptional = required === false;
 
+  const labelTextSize = size === "xs" ? "text-xs" : size === "sm" ? "text-sm" : "text-base";
+
   return (
-    <FieldBase.Root className={fieldVariants({ controlFirst })}>
-      <FieldBase.Label className="m-0 text-base font-medium text-kumo-default">
-        <Label showOptional={showOptional} tooltip={labelTooltip} asContent>
+    <FieldBase.Root className={fieldVariants({ controlFirst, size })}>
+      <FieldBase.Label className={cn("m-0 flex w-full items-center justify-between text-kumo-default", labelTextSize)}>
+        <span className="inline-flex items-center gap-1 font-medium">
           {label}
-        </Label>
+          {labelTooltip && (
+            <Label tooltip={labelTooltip} asContent>
+              {""}
+            </Label>
+          )}
+        </span>
+        {showOptional && (
+          <span className="text-sm font-normal text-kumo-subtle">Optional</span>
+        )}
       </FieldBase.Label>
       {children}
       {error ? (

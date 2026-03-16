@@ -501,6 +501,7 @@ export const EmptyPropsSchema = z.object({
 
 export const FieldPropsSchema = z.object({
   controlFirst: z.boolean().optional(), // When `true`, places the control before the label (for checkbox/switch layouts).
+  size: z.enum(["xs", "sm", "base", "lg"]).optional(), // Size of the field, affects spacing between label and input.
   children: z.union([z.string(), z.number(), z.boolean(), z.null(), DynamicValueSchema]).optional(), // The form control element(s) to wrap (Input, Select, Checkbox, etc.).
   label: z.union([z.string(), z.number(), z.boolean(), z.null(), DynamicValueSchema]).optional(), // The label content — can be a string or any React node.
   required: z.boolean().optional(), // When explicitly `false`, shows gray "(optional)" text after the label. When `true` or `undefined`, no indicator is shown.

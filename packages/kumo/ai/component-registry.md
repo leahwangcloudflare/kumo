@@ -1077,27 +1077,6 @@ Props:
 - `lang`: CodeLang
 
 
-**Examples:**
-
-```tsx
-<CodeBlock
-      lang="tsx"
-      code={`const greeting = "Hello, World!";
-console.log(greeting);`}
-    />
-```
-
-```tsx
-<Code
-      lang="bash"
-      code="export API_KEY={{apiKey}}"
-      values={{
-        apiKey: { value: "sk_live_123", highlight: true },
-      }}
-    />
-```
-
-
 ---
 
 ### Collapsible
@@ -2559,6 +2538,8 @@ Form field wrapper that provides a label, optional description, and error displa
 
 - `controlFirst`: boolean
   When `true`, places the control before the label (for checkbox/switch layouts).
+- `size`: enum
+  Size of the field, affects spacing between label and input.
 - `children`: ReactNode
   The form control element(s) to wrap (Input, Select, Checkbox, etc.).
 - `label`: ReactNode
@@ -2913,39 +2894,45 @@ Input component
 **Examples:**
 
 ```tsx
-<Input
-      label="Email"
-      placeholder="you@example.com"
-      description="We'll never share your email"
-    />
+<div className="max-w-2xl">
+      <Input
+        label="Email"
+        placeholder="you@example.com"
+        description="We'll never share your email"
+      />
+    </div>
 ```
 
 ```tsx
-<Input
-      label="Email"
-      placeholder="you@example.com"
-      value="invalid-email"
-      variant="error"
-      error="Please enter a valid email address"
-    />
+<div className="max-w-2xl">
+      <Input
+        label="Email"
+        placeholder="you@example.com"
+        value="invalid-email"
+        variant="error"
+        error="Please enter a valid email address"
+      />
+    </div>
 ```
 
 ```tsx
-<Input
-      label="Password"
-      type="password"
-      value="short"
-      variant="error"
-      error={{
-        message: "Password must be at least 8 characters",
-        match: "tooShort",
-      }}
-      minLength={8}
-    />
+<div className="max-w-2xl">
+      <Input
+        label="Password"
+        type="password"
+        value="short"
+        variant="error"
+        error={{
+          message: "Password must be at least 8 characters",
+          match: "tooShort",
+        }}
+        minLength={8}
+      />
+    </div>
 ```
 
 ```tsx
-<div className="flex flex-col gap-4">
+<div className="flex flex-col gap-4 max-w-2xl">
       <Input size="xs" label="Extra Small" placeholder="Extra small input" />
       <Input size="sm" label="Small" placeholder="Small input" />
       <Input label="Base" placeholder="Base input (default)" />
@@ -2954,11 +2941,13 @@ Input component
 ```
 
 ```tsx
-<Input label="Disabled field" placeholder="Cannot edit" disabled />
+<div className="max-w-2xl">
+      <Input label="Disabled field" placeholder="Cannot edit" disabled />
+    </div>
 ```
 
 ```tsx
-<div className="flex flex-col gap-4">
+<div className="flex flex-col gap-4 max-w-2xl">
       <Input type="email" label="Email" placeholder="you@example.com" />
       <Input type="password" label="Password" placeholder="••••••••" />
       <Input type="number" label="Age" placeholder="18" />
@@ -2967,32 +2956,38 @@ Input component
 ```
 
 ```tsx
-<Input
-      label="Phone Number"
-      required={false}
-      placeholder="+1 (555) 000-0000"
-    />
+<div className="max-w-2xl">
+      <Input
+        label="Phone Number"
+        required={false}
+        placeholder="+1 (555) 000-0000"
+      />
+    </div>
 ```
 
 ```tsx
-<Input
-      label="API Key"
-      labelTooltip="Find this in your dashboard under Settings > API Keys"
-      placeholder="sk_live_..."
-    />
+<div className="max-w-2xl">
+      <Input
+        label="API Key"
+        labelTooltip="Find this in your dashboard under Settings > API Keys"
+        placeholder="sk_live_..."
+      />
+    </div>
 ```
 
 ```tsx
-<Input
-      label={
-        <span>
-          Email for <strong>billing</strong>
-        </span>
-      }
-      required
-      placeholder="billing@company.com"
-      type="email"
-    />
+<div className="max-w-2xl">
+      <Input
+        label={
+          <span>
+            Email for <strong>billing</strong>
+          </span>
+        }
+        required
+        placeholder="billing@company.com"
+        type="email"
+      />
+    </div>
 ```
 
 
@@ -3424,7 +3419,7 @@ Progress bar showing a measured value within a known range (e.g. quota usage).
 <Meter
       label="Upload progress"
       value={80}
-      indicatorClassName="from-green-500 via-green-500 to-green-500"
+      indicatorClassName="from-kumo-success via-kumo-success to-kumo-success"
     />
 ```
 
@@ -5038,6 +5033,18 @@ Accessible popup that shows additional information on hover/focus. Wrap your app
           />
         </Tooltip>
       </div>
+    </TooltipProvider>
+```
+
+```tsx
+<TooltipProvider>
+      <Tooltip
+        content="Click to learn more"
+        className="inline-flex items-center gap-1.5 rounded-full bg-kumo-brand px-3 py-1.5 text-sm font-medium text-white shadow-md transition-transform hover:scale-105 active:scale-95"
+      >
+        <Info className="size-4" />
+        <span>Help</span>
+      </Tooltip>
     </TooltipProvider>
 ```
 

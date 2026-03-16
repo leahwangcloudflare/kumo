@@ -19,7 +19,7 @@ export const KUMO_INPUT_VARIANTS = {
       description: "Small input for secondary fields",
     },
     base: {
-      classes: "h-9 gap-1.5 rounded-lg px-3 text-base",
+      classes: "h-9 gap-1 rounded-lg px-3 text-base",
       description: "Default input size",
     },
     lg: {
@@ -171,6 +171,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         required={required}
         labelTooltip={labelTooltip}
         description={description}
+        size={size}
         error={
           error
             ? typeof error === "string"
