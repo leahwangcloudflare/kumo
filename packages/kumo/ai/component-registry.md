@@ -1188,7 +1188,7 @@ Combobox — autocomplete input with filterable dropdown list.  Compound compone
 
 **Colors (kumo tokens used):**
 
-`bg-kumo-control`, `bg-kumo-fill-hover`, `bg-kumo-overlay`, `border-kumo-line`, `fill-kumo-ring`, `ring-kumo-line`, `text-kumo-default`, `text-kumo-strong`, `text-kumo-subtle`
+`bg-kumo-control`, `bg-kumo-fill-hover`, `bg-kumo-overlay`, `border-kumo-line`, `fill-kumo-subtle`, `ring-kumo-line`, `text-kumo-default`, `text-kumo-strong`, `text-kumo-subtle`
 
 **Sub-Components:**
 
@@ -3810,6 +3810,13 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
   Child Radio.Item components
 - `orientation`: enum
   Layout direction of the radio items
+- `appearance`: enum [default: default]
+  - `"default"`: Standard inline radio item
+  - `"card"`: Choice card appearance with border, padding, and highlighted selection state
+
+  **State Classes:**
+  - `"card"`:
+    - `hover`: `hover:bg-kumo-tint`
 - `error`: string
   Error message for the group
 - `description`: ReactNode
@@ -3819,7 +3826,7 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
 - `disabled`: boolean
   Whether all radios in the group are disabled
 - `controlPosition`: enum
-  Position of radio control relative to label: "start" (default) puts radio before label, "end" puts label before radio
+  Position of radio control relative to label: "start" (default) puts radio before label, "end" puts label before radio. Note: In card appearance, the control is always positioned at the end.
 - `name`: string
   Form submission name for the radio group
 - `className`: string
@@ -3827,7 +3834,7 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
 
 **Colors (kumo tokens used):**
 
-`bg-kumo-base`, `bg-kumo-contrast`, `border-kumo-line`, `ring-kumo-danger`, `ring-kumo-line`, `ring-kumo-ring`, `text-kumo-danger`, `text-kumo-default`, `text-kumo-subtle`
+`bg-kumo-base`, `bg-kumo-contrast`, `bg-kumo-tint`, `border-kumo-danger`, `border-kumo-interact`, `border-kumo-line`, `border-kumo-ring`, `ring-kumo-danger`, `ring-kumo-line`, `ring-kumo-ring`, `text-kumo-danger`, `text-kumo-default`, `text-kumo-subtle`
 
 **Examples:**
 
@@ -3870,18 +3877,37 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
 ```
 
 ```tsx
-<Radio.Group
-      legend="Payment method"
-      error="Please select a payment method to continue"
-    >
-      <Radio.Item label="Credit Card" value="card" variant="error" />
-      <Radio.Item label="PayPal" value="paypal" variant="error" />
-      <Radio.Item label="Bank Transfer" value="bank" variant="error" />
-    </Radio.Group>
+<div className="grid grid-cols-2 gap-6">
+      <Radio.Group
+        legend="Payment method"
+        error="Please select a payment method to continue"
+      >
+        <Radio.Item label="Credit Card" value="card" variant="error" />
+        <Radio.Item label="PayPal" value="paypal" variant="error" />
+      </Radio.Group>
+      <Radio.Group
+        legend="Payment method"
+        appearance="card"
+        error="Please select a payment method to continue"
+      >
+        <Radio.Item
+          label="Credit Card"
+          description="Pay with Visa, Mastercard, American Express, or Elo."
+          value="card"
+          variant="error"
+        />
+        <Radio.Item
+          label="PayPal"
+          description="Pay with your PayPal account."
+          value="paypal"
+          variant="error"
+        />
+      </Radio.Group>
+    </div>
 ```
 
 ```tsx
-<div className="flex flex-col gap-6">
+<div className="grid grid-cols-2 gap-6">
       <Radio.Group legend="Disabled group" disabled defaultValue="a">
         <Radio.Item label="Option A" value="a" />
         <Radio.Item label="Option B" value="b" />
@@ -3890,6 +3916,40 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
         <Radio.Item label="Available" value="available" />
         <Radio.Item label="Unavailable" value="unavailable" disabled />
       </Radio.Group>
+      <Radio.Group
+        legend="Disabled card group"
+        appearance="card"
+        disabled
+        defaultValue="a"
+      >
+        <Radio.Item
+          label="Option A"
+          description="This option is disabled."
+          value="a"
+        />
+        <Radio.Item
+          label="Option B"
+          description="This option is disabled."
+          value="b"
+        />
+      </Radio.Group>
+      <Radio.Group
+        legend="Individual disabled card"
+        appearance="card"
+        defaultValue="available"
+      >
+        <Radio.Item
+          label="Available"
+          description="This option can be selected."
+          value="available"
+        />
+        <Radio.Item
+          label="Unavailable"
+          description="This option is not available."
+          value="unavailable"
+          disabled
+        />
+      </Radio.Group>
     </div>
 ```
 
@@ -3897,6 +3957,67 @@ Radio — radio button group for single-select choices.  Compound component: `Ra
 <Radio.Group legend="Preferences" controlPosition="end" defaultValue="a">
       <Radio.Item label="Label before radio" value="a" />
       <Radio.Item label="Another option" value="b" />
+    </Radio.Group>
+```
+
+```tsx
+<Radio.Group
+      legend="Choose a plan"
+      appearance="card"
+      value={value}
+      onValueChange={setValue}
+    >
+      <Radio.Item
+        label="Free"
+        description="For personal or hobby projects that aren't business-critical."
+        value="free"
+      />
+      <Radio.Item
+        label="Pro"
+        description="For professional websites that aren't business-critical."
+        value="pro"
+      />
+      <Radio.Item
+        label="Business"
+        description="For small businesses operating online."
+        value="business"
+      />
+      <Radio.Item
+        label="Contract"
+        description="For mission-critical applications that are core to your business."
+        value="contract"
+      />
+    </Radio.Group>
+```
+
+```tsx
+<Radio.Group
+      legend="Choose a plan"
+      appearance="card"
+      orientation="horizontal"
+      value={value}
+      onValueChange={setValue}
+    >
+      <Radio.Item
+        label="Free"
+        description="For personal or hobby projects that aren't business-critical."
+        value="free"
+      />
+      <Radio.Item
+        label="Pro"
+        description="For professional websites that aren't business-critical."
+        value="pro"
+      />
+      <Radio.Item
+        label="Business"
+        description="For small businesses operating online."
+        value="business"
+      />
+      <Radio.Item
+        label="Contract"
+        description="For mission-critical applications that are core to your business."
+        value="contract"
+      />
     </Radio.Group>
 ```
 
