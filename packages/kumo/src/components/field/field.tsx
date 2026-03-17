@@ -1,7 +1,9 @@
 import { Field as FieldBase } from "@base-ui/react/field";
 import type { ReactNode } from "react";
 import { cn } from "../../utils/cn";
-import { Label } from "../label";
+import { Tooltip } from "../tooltip";
+import { Button } from "../button";
+import { InfoIcon } from "@phosphor-icons/react";
 
 /** Field variant definitions (currently empty, reserved for future additions). */
 export const KUMO_FIELD_VARIANTS = {
@@ -33,7 +35,14 @@ export function fieldVariants({
   controlFirst = false,
   size = "base",
 }: KumoFieldVariantsProps = {}) {
-  const gapClass = size === "lg" ? "gap-2" : size === "base" ? "gap-1" : "gap-1";
+  const gapBySize = {
+    xs: "gap-1",
+    sm: "gap-1",
+    base: "gap-1.5",
+    lg: "gap-2",
+  } as const;
+
+  const gapClass = gapBySize[size];
   
   return cn(
     // Base styles - vertical layout (default)
@@ -148,13 +157,20 @@ export function Field({
         <span className="inline-flex items-center gap-1 font-medium">
           {label}
           {labelTooltip && (
-            <Label tooltip={labelTooltip} asContent>
-              {""}
-            </Label>
+            <Tooltip content={labelTooltip} asChild>
+              <Button
+                variant="ghost"
+                size="xs"
+                shape="square"
+                aria-label="More information"
+              >
+                <InfoIcon className="size-4" />
+              </Button>
+            </Tooltip>
           )}
         </span>
         {showOptional && (
-          <span className="text-sm font-normal text-kumo-subtle">Optional</span>
+          <span className={cn("font-normal text-kumo-subtle", labelTextSize)}>Optional</span>
         )}
       </FieldBase.Label>
       {children}
