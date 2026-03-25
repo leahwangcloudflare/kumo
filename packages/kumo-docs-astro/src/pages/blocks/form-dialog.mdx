@@ -1,0 +1,180 @@
+---
+layout: ~/layouts/MdxDocLayout.astro
+title: "Form Dialog"
+description: "A dialog block for create and edit forms, with optional banner support and built-in submit/cancel actions."
+sourceFile: "blocks/form-dialog"
+---
+
+import Heading from "~/components/docs/Heading.astro";
+import ComponentSection from "~/components/docs/ComponentSection.astro";
+import ComponentExample from "~/components/docs/ComponentExample.astro";
+import PropsTable from "~/components/docs/PropsTable.astro";
+import Callout from "~/components/docs/Callout.astro";
+import {
+  FormDialogSmDemo,
+  FormDialogBasicDemo,
+  FormDialogComplexDemo,
+  FormDialogWithBannerDemo,
+  FormDialogErrorDemo,
+} from "~/components/demos/FormDialogDemo";
+
+{/* Hero Demo */}
+
+<ComponentSection>
+  <ComponentExample demo="FormDialogBasicDemo">
+    <FormDialogBasicDemo client:load />
+  </ComponentExample>
+</ComponentSection>
+
+{/* Installation */}
+
+<ComponentSection>
+  <Heading level={2}>Installation</Heading>
+  <p>
+    FormDialog is a <strong>block</strong> - a CLI-installed component that you
+    own and can customize. Unlike regular components, blocks are copied into your
+    project so you have full control over the code.
+  </p>
+  <div class="space-y-4">
+    <div>
+      <p>**1. Initialize Kumo config (first time only)**</p>
+
+```bash
+npx @cloudflare/kumo init
+```
+
+</div>
+<div>
+<p>**2. Install the block**</p>
+
+```bash
+npx @cloudflare/kumo add form-dialog
+```
+
+</div>
+<div>
+<p>**3. Import from your local path**</p>
+
+```tsx
+// The path depends on your kumo.json blocksDir setting
+// Default: src/components/kumo/
+import { FormDialog } from "./components/kumo/form-dialog/form-dialog";
+```
+
+    </div>
+
+  </div>
+  <Callout type="info">
+    <strong>Why blocks?</strong> Blocks give you full ownership of the code,
+    allowing you to customize form layouts, validation behaviour, and reset logic
+    to fit your specific needs.
+  </Callout>
+</ComponentSection>
+
+{/* Usage */}
+
+<ComponentSection>
+  <Heading level={2}>Usage</Heading>
+
+```tsx
+import { useState } from "react";
+import { Button, Input } from "@cloudflare/kumo";
+import { FormDialog } from "./components/kumo/form-dialog/form-dialog";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await createZone(name);
+    setIsSubmitting(false);
+    setName("");
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setName("");
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Button variant="primary" onClick={() => setOpen(true)}>
+        Add Zone
+      </Button>
+      <FormDialog
+        open={open}
+        onOpenChange={(o) => !o && handleClose()}
+        title="Add Zone"
+        description="Enter the domain name you want to add to Cloudflare."
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        isSubmitDisabled={!name.trim()}
+        submitButtonText="Add Zone"
+      >
+        <Input
+          label="Domain name"
+          placeholder="example.com"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </FormDialog>
+    </>
+  );
+}
+```
+
+</ComponentSection>
+
+{/* Examples */}
+
+<ComponentSection>
+  <Heading level={2}>Examples</Heading>
+
+<Heading level={3}>Size</Heading>
+<p>
+  Use <code>size="sm"</code> for single-field forms or text-only dialogs, and{" "}
+  <code>size="base"</code> (default) for forms with two side-by-side inputs or
+  one long input.
+</p>
+<ComponentExample demo="FormDialogSmDemo">
+  <FormDialogSmDemo client:load />
+</ComponentExample>
+
+<Heading level={3}>Multiple sections</Heading>
+<p>
+  Use <code>children</code> to compose sections with their own headings and
+  descriptions.
+</p>
+<ComponentExample demo="FormDialogComplexDemo">
+  <FormDialogComplexDemo client:load />
+</ComponentExample>
+
+<Heading level={3}>With Info Banner</Heading>
+<p>
+  Pass any <code>ReactNode</code> to the <code>banner</code> prop — the caller
+  decides whether it is an info notice, a warning, or an error.
+</p>
+<ComponentExample demo="FormDialogWithBannerDemo">
+  <FormDialogWithBannerDemo client:load />
+</ComponentExample>
+
+  <Heading level={3}>Error State</Heading>
+  <p>
+    Show a <code>Banner variant="error"</code> when the server returns an error.
+    Pass <code>undefined</code> to hide it when there is no error.
+  </p>
+  <ComponentExample demo="FormDialogErrorDemo">
+    <FormDialogErrorDemo client:load />
+  </ComponentExample>
+</ComponentSection>
+
+{/* API Reference */}
+
+<ComponentSection>
+  <Heading level={2}>API Reference</Heading>
+  <PropsTable component="FormDialog" />
+</ComponentSection>
