@@ -35,6 +35,58 @@ export interface KumoFormDialogVariantsProps {
   size?: KumoFormDialogSize;
 }
 
+export interface FormDialogCancelButtonProps {
+  /** Button label. @default "Cancel" */
+  children?: ReactNode;
+  /** Whether the button is disabled. */
+  disabled?: boolean;
+  /** Shows a loading spinner and disables interaction. */
+  loading?: boolean;
+  /** Additional CSS classes. */
+  className?: string;
+}
+
+export function FormDialogCancelButton({
+  children = "Cancel",
+  ...props
+}: FormDialogCancelButtonProps) {
+  return (
+    <DialogClose
+      render={(dialogProps) => (
+        <Button {...dialogProps} {...props} variant="secondary">
+          {children}
+        </Button>
+      )}
+    />
+  );
+}
+
+FormDialogCancelButton.displayName = "FormDialogCancelButton";
+
+export interface FormDialogSubmitButtonProps {
+  /** Button label. @default "Save" */
+  children?: ReactNode;
+  /** Whether the button is disabled. */
+  disabled?: boolean;
+  /** Shows a loading spinner and disables interaction. */
+  loading?: boolean;
+  /** Additional CSS classes. */
+  className?: string;
+}
+
+export function FormDialogSubmitButton({
+  children = "Save",
+  ...props
+}: FormDialogSubmitButtonProps) {
+  return (
+    <Button type="submit" variant="primary" {...props}>
+      {children}
+    </Button>
+  );
+}
+
+FormDialogSubmitButton.displayName = "FormDialogSubmitButton";
+
 export interface FormDialogProps extends KumoFormDialogVariantsProps {
   /** Whether the dialog is open */
   open: boolean;
@@ -52,14 +104,10 @@ export interface FormDialogProps extends KumoFormDialogVariantsProps {
   children: ReactNode;
   /** Called when the form is submitted */
   onSubmit: (e: React.FormEvent) => void;
-  /** Whether the submit action is in progress */
-  isSubmitting?: boolean;
-  /** Whether the submit button should be disabled */
-  isSubmitDisabled?: boolean;
-  /** Submit button label (default: "Save") */
-  submitButtonText?: string;
-  /** Cancel button label (default: "Cancel") */
-  cancelButtonText?: string;
+  /** Cancel button. Defaults to <FormDialogCancelButton /> */
+  cancelButton?: ReactNode;
+  /** Submit button. Defaults to <FormDialogSubmitButton /> */
+  submitButton?: ReactNode;
   /** Additional className for the dialog */
   className?: string;
 }
@@ -73,10 +121,8 @@ export function FormDialog({
   errorMessage,
   children,
   onSubmit,
-  isSubmitting = false,
-  isSubmitDisabled = false,
-  submitButtonText = "Save",
-  cancelButtonText = "Cancel",
+  cancelButton = <FormDialogCancelButton />,
+  submitButton = <FormDialogSubmitButton />,
   size = KUMO_FORM_DIALOG_DEFAULT_VARIANTS.size,
   className,
 }: FormDialogProps) {
@@ -90,7 +136,7 @@ export function FormDialog({
           className,
         )}
       >
-        <div className="flex flex-col px-6 pt-6 pb-2">
+        <div className="flex flex-col px-6 pt-6 pb-4">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
             <DialogClose
@@ -101,7 +147,6 @@ export function FormDialog({
                   shape="square"
                   size="sm"
                   aria-label="Close"
-                  disabled={isSubmitting}
                 >
                   <XIcon size={20} />
                 </Button>
@@ -126,23 +171,10 @@ export function FormDialog({
         </div>
 
         <form onSubmit={onSubmit}>
-          <div className="flex flex-col gap-4 px-6 pt-2 pb-4">{children}</div>
-          <div className="flex justify-end gap-3 px-6 py-4">
-            <DialogClose
-              render={(props) => (
-                <Button {...props} variant="secondary" disabled={isSubmitting}>
-                  {cancelButtonText}
-                </Button>
-              )}
-            />
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={isSubmitDisabled || isSubmitting}
-              loading={isSubmitting}
-            >
-              {submitButtonText}
-            </Button>
+          <div className="flex flex-col gap-4 px-6 py-2">{children}</div>
+          <div className="flex justify-end gap-3 px-6 py-6">
+            {cancelButton}
+            {submitButton}
           </div>
         </form>
       </Dialog>
